@@ -187,6 +187,14 @@ def SlurmRun(trialconfig):
     if str(os.getenv("HOSTNAME","localhost")).endswith("bede.dur.ac.uk"):
         sub_commands.extend([
                 '#SBATCH --account MYACOCUNT',
+                '''
+                arch=$(uname -i) # Get the CPU architecture
+                if [[ $arch == "aarch64" ]]; then
+                   # Set variables and source scripts for aarch64
+                   export CONDADIR=/nobackup/projects/<project>/$USER/ # Update this with your <project> code.
+                   source $CONDADIR/aarchminiconda/etc/profile.d/conda.sh
+                fi
+                '''
                 'export CONDADIR=/nobackup/projects/<BEDEPROJECT>/$USER/miniconda',
                 'export NCCL_SOCKET_IFNAME=ib0'])
         comm="python3"
